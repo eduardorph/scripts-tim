@@ -13,6 +13,11 @@ function _GETURL(variavel)
     return null;
 }
 
+function cria_cookie(name, element){
+	console.log("Cookie "+name+" criado");
+	document.cookie = name+" = "+element+";path=/";
+}
+
 //FUNÇÃO PARA PEGAR OS VALORES DOS COOKIES
 function readCookie(name) {
 	var nameEQ = name + "=";
@@ -30,6 +35,11 @@ function readCookie(name) {
 
 //FUNÇÃO PARA CRIAR UM INPUT HIDDEN NO FORMULÁRIO    
 function _CRIAINPUT(nome, propriedade){
+	if (propriedade == null) {
+		return false;
+		console.log('A');
+	}else{
+
 	  var propriedade = propriedade.toUpperCase();
 
 	  var input = document.createElement("input");
@@ -37,6 +47,7 @@ function _CRIAINPUT(nome, propriedade){
 	  input.setAttribute("name", nome);
 	  input.setAttribute("value", propriedade);
 	  $( "form" ).append( input );
+	}
 }
 
 var valida_utm_campaign = function(utm_campaign){
@@ -63,14 +74,18 @@ var valida_utm_campaign = function(utm_campaign){
 
 
 var adapta_campanha = function(campanha){
-	var palavra = campanha.toUpperCase();
+	if (campanha == null) {
+		return null;
+	}else{
+		var palavra = campanha.toUpperCase();
 
-	var camp = valida_utm_campaign(palavra);
+		var camp = valida_utm_campaign(palavra);
 
-	var new_camp = camp.split(" ");
+		var new_camp = camp.split(" ");
 
-	// return new_camp[0]+'-'+new_camp[1];
-	return campanha;
+		// return new_camp[0]+'-'+new_camp[1];
+		return campanha;
+	}
 }
   
 //FUNÇÃO PARA MUDAR OS TELEFONES DE ACORDO COM A CAMPANHA
@@ -131,56 +146,81 @@ var do_form = function(form, event){
 
 
 
+$(document).ready(function() {
+	if ( readCookie('utm_campaign') ){
 
-if ( readCookie('utm_campaign') ){
+		if( _GETURL("utm_campaign") ){
+			console.log(_GETURL("utm_campaign"));
 
-	if( _GETURL("utm_campaign") ){
-		console.log(_GETURL("utm_campaign"));
+		    if ( readCookie('utm_campaign') == _GETURL("utm_campaign") ){
+		        //Se o cookie existir, a URL também existir e eles forem iguais, muda os telefones.
+		        // muda_tel( checa_campanha( _GETURL("utm_campaign") ) );
+		        _CRIAINPUT( "campanha", adapta_campanha( _GETURL("utm_campaign") ));
+		        _CRIAINPUT( "utm_source", _GETURL("utm_source") );
+				_CRIAINPUT( "utm_medium", _GETURL("utm_medium") );
+				_CRIAINPUT( "utm_content", _GETURL("utm_content") );
+		        $('#campanha').val(  _GETURL("utm_campaign")  );
+		    }else{
+		        //Se o cookie existir, a URL também existir e eles NÃO forem iguais, muda os telefones e atualiza o COOKIE para o mesmo valor da URL.
+		        // muda_tel( checa_campanha( _GETURL("utm_campaign") ) );
+		        cria_cookie("utm_campaign", _GETURL("utm_campaign"));
+		        cria_cookie("utm_source", _GETURL("utm_source"));
+				cria_cookie("utm_medium", _GETURL("utm_medium"));
+				cria_cookie("utm_content", _GETURL("utm_content"));
+		        _CRIAINPUT( "campanha", adapta_campanha( _GETURL("utm_campaign") ));
+		        _CRIAINPUT( "utm_source", _GETURL("utm_source") );
+				_CRIAINPUT( "utm_medium", _GETURL("utm_medium") );
+				_CRIAINPUT( "utm_content", _GETURL("utm_content") );
+		        $('#campanha').val(  _GETURL("utm_campaign")  );
+		    }
 
-	    if ( readCookie('utm_campaign') == _GETURL("utm_campaign") ){
-	        //Se o cookie existir, a URL também existir e eles forem iguais, muda os telefones.
-	        // muda_tel( checa_campanha( _GETURL("utm_campaign") ) );
-	        _CRIAINPUT( "campanha", adapta_campanha( _GETURL("utm_campaign") ));
-	        $('#campanha').val(  _GETURL("utm_campaign")  );
-	    }else{
-	        //Se o cookie existir, a URL também existir e eles NÃO forem iguais, muda os telefones e atualiza o COOKIE para o mesmo valor da URL.
-	        // muda_tel( checa_campanha( _GETURL("utm_campaign") ) );
-	        document.cookie = "utm_campaign = "+_GETURL("utm_campaign");
-	        _CRIAINPUT( "campanha", adapta_campanha( _GETURL("utm_campaign") ));
-	        $('#campanha').val(  _GETURL("utm_campaign")  );
-	    }
+		}else{
+
+		    //Se o cookie existir, mas a url não existir, muda o telefone pelo valor do cookie
+		    // muda_tel( checa_campanha( readCookie("utm_campaign") ) );
+		    _CRIAINPUT( "campanha", adapta_campanha( readCookie("utm_campaign") ));
+		    _CRIAINPUT( "utm_source", readCookie("utm_source") );
+			_CRIAINPUT( "utm_medium", readCookie("utm_medium") );
+			_CRIAINPUT( "utm_content", readCookie("utm_content") );
+		    $('#campanha').val(  readCookie("utm_campaign")  );
+
+		}
+
+
 
 	}else{
 
-	    //Se o cookie existir, mas a url não existir, muda o telefone pelo valor do cookie
-	    // muda_tel( checa_campanha( readCookie("utm_campaign") ) );
-	    _CRIAINPUT( "campanha", adapta_campanha( readCookie("utm_campaign") ));
-	    $('#campanha').val(  readCookie("utm_campaign")  );
+		if( _GETURL("utm_campaign") ){
+			console.log(_GETURL("utm_campaign"));
+
+			//Se o cookie não existir, mas a URL existir, muda os telefones e Cria o cookie
+			// muda_tel( checa_campanha( _GETURL("utm_campaign") ) );         
+
+			cria_cookie("utm_campaign", _GETURL("utm_campaign"));
+			cria_cookie("utm_source", _GETURL("utm_source"));
+			cria_cookie("utm_medium", _GETURL("utm_medium"));
+			cria_cookie("utm_content", _GETURL("utm_content"));
+			_CRIAINPUT( "campanha", adapta_campanha( _GETURL("utm_campaign") ));
+			_CRIAINPUT( "utm_source", _GETURL("utm_source") );
+			_CRIAINPUT( "utm_medium", _GETURL("utm_medium") );
+			_CRIAINPUT( "utm_content", _GETURL("utm_content") );
+			$('#campanha').val(  _GETURL("utm_campaign")  );
+
+		}else{
+
+			//se o cookie e a url não existirem, não muda telefone, mas cria os inputs utm_source e medium com valores padrões
+			_CRIAINPUT( "campanha", 'ORGANICO');
+			_CRIAINPUT( "utm_source", 'null' );
+			_CRIAINPUT( "utm_medium", 'null' );
+			_CRIAINPUT( "utm_content", 'null' );
+			$('#campanha').val( 'ORGANICO' );
+
+
+		}
 
 	}
-
-}else{
-
-	if( _GETURL("utm_campaign") ){
-		console.log(_GETURL("utm_campaign"));
-
-		//Se o cookie não existir, mas a URL existir, muda os telefones e Cria o cookie
-		// muda_tel( checa_campanha( _GETURL("utm_campaign") ) );         
-
-		document.cookie = "utm_campaign = "+_GETURL("utm_campaign");
-		_CRIAINPUT( "campanha", adapta_campanha( _GETURL("utm_campaign") ));
-		$('#campanha').val(  _GETURL("utm_campaign")  );
-
-	}else{
-
-		//se o cookie e a url não existirem, não muda telefone, mas cria os inputs utm_source e medium com valores padrões
-		_CRIAINPUT( "campanha", 'ORGANICO');
-		$('#campanha').val( 'ORGANICO' );
-
-
-	}
-
-}
+	
+});
 
 
 // VALIDAÇÃO DE FORMULÁRIO
@@ -217,3 +257,5 @@ $( document ).on('click', '#form-btn', function(event) {
 		console.log("Não envia");
 	}
 });
+
+console.log('version: 1.0');
