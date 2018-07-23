@@ -233,6 +233,7 @@ $(document).ready(function() {
 	});
 
 
+	$(".pj-field").css('display', 'none');
 	$(".pj-field").removeAttr('required');
 	$('.tipo-pessoa').on('click change', function(e) {
 	    var id_tipo = $(this).attr('id');
@@ -281,4 +282,4 @@ $( document ).on('click', '#form-btn', function(event) {
 	}
 });
 
-console.log('version: 3.1');
+console.log('version: 3.2');
