@@ -120,20 +120,24 @@ var do_form = function(form, event){
     if(campo_ddd.val().replace(/[^0-9]/g, '').length < 2 || campo_ddd.val().replace(/[^0-9]/g, '').length > 2 ){
       campo_ddd.css('background-color','#FF7171');
       campo_ddd.focus();
+      console.log('q');
       
       ddd = false;
     }else{
       campo_ddd.css('background-color','#FFFFFF');
+      console.log('w');
       ddd = true;
     }
 
     if(campo_telefone.val().replace(/[^0-9]/g, '').length < 8 || campo_telefone.val().replace(/[^0-9]/g, '').length > 9 ){
       campo_telefone.css('background-color','#FF7171');
+      console.log('e');
       campo_telefone.focus();
       
       tel = false;
     }else{
       campo_telefone.css('background-color','#FFFFFF');
+      console.log('r');
       tel = true;
     }
 
@@ -219,6 +223,27 @@ $(document).ready(function() {
 		}
 
 	}
+
+
+	$(document).ready(function(){
+	  $('.campo-data').mask('00/00/0000');
+	  $('.campo-cep').mask('00000-000');
+	  $('.campo-cpf').mask('000.000.000-00', {reverse: true});
+	  $('.campo-cnpj').mask('00.000.000/0000-00', {reverse: true});
+	});
+
+
+	$(".pj-field").removeAttr('required');
+	$('.tipo-pessoa').on('click change', function(e) {
+	    var id_tipo = $(this).attr('id');
+	    if (id_tipo == 'PJ') {
+	    	$(".pf-field").css('display', 'none').removeAttr('required');
+	    	$(".pj-field").css('display', 'block').attr('required', true);
+	    } else {
+	    	$(".pj-field").css('display', 'none').removeAttr('required');
+	    	$(".pf-field").css('display', 'block').attr('required', true);
+	    }
+	});
 	
 });
 
@@ -258,4 +283,4 @@ $( document ).on('click', '#form-btn', function(event) {
 	}
 });
 
-console.log('version: 1.0');
+console.log('version: 3.0');
