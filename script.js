@@ -237,11 +237,9 @@ $(document).ready(function() {
 	$('.tipo-pessoa').on('click change', function(e) {
 	    var id_tipo = $(this).attr('id');
 	    if (id_tipo == 'PJ') {
-	    	$(".pf-field").css('display', 'none').removeAttr('required');
 	    	$(".pj-field").css('display', 'block').attr('required', true);
 	    } else {
 	    	$(".pj-field").css('display', 'none').removeAttr('required');
-	    	$(".pf-field").css('display', 'block').attr('required', true);
 	    }
 	});
 	
@@ -283,4 +281,4 @@ $( document ).on('click', '#form-btn', function(event) {
 	}
 });
 
-console.log('version: 3.0');
+console.log('version: 3.1');
