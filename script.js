@@ -150,8 +150,7 @@ var do_form = function(form, event){
 }
 
 
-
-$(document).ready(function() {
+function make_actions(tel_atual){
 	if ( readCookie('utm_campaign') ){
 
 		if( _GETURL("utm_campaign") ){
@@ -224,14 +223,15 @@ $(document).ready(function() {
 		}
 
 	}
+}
 
 
-	$(document).ready(function(){
+$(document).ready(function(){
 	  $('.campo-data').mask('00/00/0000');
 	  $('.campo-cep').mask('00000-000');
 	  $('.campo-cpf').mask('000.000.000-00', {reverse: true});
 	  $('.campo-cnpj').mask('00.000.000/0000-00', {reverse: true});
-	});
+
 
 
 	$(".pj-field").css('display', 'none');
@@ -283,4 +283,4 @@ $( document ).on('click', '#form-btn', function(event) {
 	}
 });
 
-console.log('version: 4.0');
+console.log('version: 4.1');
