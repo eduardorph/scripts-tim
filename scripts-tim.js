@@ -237,12 +237,15 @@ function c2c_cod(cod_organico){
 	if( _GETURL("c2c") ){
 		cria_cookie("codcampanha", _GETURL("c2c"));
 		_CRIAINPUT( "codcampanha", _GETURL("c2c"));
+		$("input[name='codcampanha']").val(_GETURL("c2c"));
 	}else{
 		if ( readCookie('codcampanha') ){
 			cria_cookie("codcampanha", readCookie('codcampanha'));
 			_CRIAINPUT( "codcampanha", readCookie('codcampanha'));
+			$("input[name='codcampanha']").val(readCookie('codcampanha'));
 		}else{
 			_CRIAINPUT( "codcampanha", cod_organico);
+			$("input[name='codcampanha']").val(cod_organico);
 		}
 	}
 }
@@ -305,4 +308,4 @@ $( document ).on('click', '#form-btn', function(event) {
 	}
 });
 
-console.log('version: 5.0');
+console.log('version: 5.1');
